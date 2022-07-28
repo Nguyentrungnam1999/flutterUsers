@@ -17,13 +17,47 @@ class ResponsitoryPerson {
     }
   }
 
-  Future createPerson(String name, String avatar) async {
+  Future createPerson(
+      String name, String avatar, String birthdate, String address) async {
     try {
       final response = await http.post(Uri.parse(uri), body: {
         'name': name,
         'avatar': avatar,
+        'birthdate': birthdate,
+        'address': address,
       });
       if (response.statusCode == 201) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future updatePerson(
+      String id, String name, String birthdate, String address) async {
+    try {
+      final response = await http.put(Uri.parse('$uri/$id'), body: {
+        'name': name,
+        'birthdate': birthdate,
+        'address': address,
+      });
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future deletePerson(String id) async {
+    try {
+      final response = await http.delete(Uri.parse('$uri/$id'));
+      if (response.statusCode == 200) {
         return true;
       } else {
         return false;

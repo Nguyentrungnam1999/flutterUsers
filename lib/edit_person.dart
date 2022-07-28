@@ -1,0 +1,117 @@
+import 'package:crudusers/main.dart';
+import 'package:crudusers/person.dart';
+import 'package:crudusers/person_detail.dart';
+import 'package:crudusers/respository/person_respository.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+
+class EditPerson extends StatefulWidget {
+  final Person person;
+  EditPerson({required this.person});
+  @override
+  _EditPersonState createState() => _EditPersonState();
+}
+
+class _EditPersonState extends State<EditPerson> {
+  ResponsitoryPerson responsitoryPerson = ResponsitoryPerson();
+  DateTime date = DateTime.now();
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController nameController = TextEditingController();
+    TextEditingController birthdateController = TextEditingController();
+    TextEditingController addressController = TextEditingController();
+    var formatDate = DateFormat('yyyy-MM-dd').format(date);
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.indigo[700],
+        elevation: 0.0,
+        title: Text('Edit Person'),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(top: 10, bottom: 100, left: 18, right: 18),
+          child: Container(
+            height: 550,
+            width: 400,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color: Colors.indigo[500],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Center(
+                  child: Text(
+                    '${widget.person.name}',
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                    width: 300,
+                    decoration: BoxDecoration(boxShadow: []),
+                    child: TextField(
+                      decoration: InputDecoration(hintText: 'Name'),
+                      controller: nameController,
+                    )),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: 300,
+                  child: Row(
+                    children: [
+                      Text('Birth Date: '),
+                      FlatButton(
+                          onPressed: () async {
+                            DateTime? newDate = await showDatePicker(
+                                context: context,
+                                initialDate: date,
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2999));
+
+                            if (newDate == null) return;
+                            setState(() {
+                              date = newDate;
+                            });
+                          },
+                          child: Text('${formatDate}')),
+                    ],
+                  ),
+                ),
+                Container(
+                    width: 300,
+                    decoration: BoxDecoration(boxShadow: []),
+                    child: TextField(
+                      controller: addressController,
+                      decoration: InputDecoration(hintText: 'Address'),
+                    )),
+                SizedBox(
+                  width: 100,
+                  child: TextButton(
+                      style:
+                          TextButton.styleFrom(backgroundColor: Colors.white),
+                      onPressed: () async {
+                        bool response = await responsitoryPerson.updatePerson(
+                            widget.person.id,
+                            nameController.text,
+                            date.toString(),
+                            addressController.text);
+                        if (response) {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => HomePage()));
+                        }
+                      },
+                      child: Text('Save')),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

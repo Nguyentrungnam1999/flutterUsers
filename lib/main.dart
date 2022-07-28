@@ -1,5 +1,6 @@
 import 'package:crudusers/create_page.dart';
 import 'package:crudusers/person.dart';
+import 'package:crudusers/person_detail.dart';
 import 'package:crudusers/respository/person_respository.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -35,34 +36,54 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  Future refresh() async {
+    persons = await responsitoryPerson.getData();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'user app',
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('employee list'),
+          title: const Text('Person list'),
           actions: [Icon(Icons.person_pin_rounded)],
         ),
-        body: ListView.builder(
-          itemCount: persons.length,
-          itemBuilder: ((context, index) {
-            Person person = persons[index];
-            DateTime dt = DateTime.parse(person.birthdate ?? '');
-            var formatDate = DateFormat('yy-MM-dd').format(dt);
+        body: RefreshIndicator(
+          onRefresh: refresh,
+          child: ListView.builder(
+            itemCount: persons.length,
+            itemBuilder: ((context, index) {
+              Person person = persons[index];
+              DateTime dt = DateTime.parse(person.birthdate ?? '');
+              var formatDate = DateFormat('yyyy-MM-dd').format(dt);
 
-            return ListTile(
-              leading: Container(
-                  height: 60,
-                  child: CircleAvatar(
-                    radius: 30.0,
-                    backgroundImage: NetworkImage('${persons[index].avatar}'),
-                    backgroundColor: Colors.transparent,
-                  )),
-              title: new Text('${person.name}'),
-              subtitle: Text('${formatDate.toString()}'),
-            );
-          }),
+              return InkWell(
+                onTap: (() {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyDetails(
+                              person: person,
+                            )),
+                  );
+                }),
+                child: ListTile(
+                  leading: Container(
+                      height: 60,
+                      child: CircleAvatar(
+                        radius: 30.0,
+                        backgroundImage: NetworkImage(
+                            '${person.avatar == '' ? 'https://picsum.photos/250?image=9' : person.avatar}'),
+                        backgroundColor: Colors.transparent,
+                      )),
+                  title: new Text('${person.name}'),
+                  subtitle: Text('${formatDate.toString()}'),
+                ),
+              );
+            }),
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
