@@ -31,68 +31,81 @@ class _MyDetailsState extends State<MyDetails> {
           padding: EdgeInsets.symmetric(horizontal: 18, vertical: 32),
           child: Column(
             children: [
-              Container(
-                height: 50,
-                width: MediaQuery.of(context).size.width,
-                color: Colors.indigo[700],
-                child: Center(
-                    child: Text(
-                  'Details',
-                  style: TextStyle(color: Color(0xffFFFFFF)),
-                )),
+              Card(
+                elevation: 3,
+                margin: EdgeInsets.zero,
+                child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.indigo[700],
+                  child: Center(
+                      child: Text(
+                    'Details',
+                    style: TextStyle(color: Color(0xffFFFFFF)),
+                  )),
+                ),
               ),
-              Container(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 18, vertical: 32),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Container(
-                          height: 90,
-                          width: 90,
-                          child: CircleAvatar(
-                            radius: 30.0,
-                            backgroundImage:
-                                NetworkImage('${widget.person.avatar}'),
-                            backgroundColor: Colors.transparent,
+              Card(
+                elevation: 3,
+                margin: EdgeInsets.zero,
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 32),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Container(
+                            height: 90,
+                            width: 90,
+                            child: CircleAvatar(
+                              radius: 30.0,
+                              backgroundImage:
+                                  NetworkImage('${widget.person.avatar}'),
+                              backgroundColor: Colors.transparent,
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-                      Text(
-                        'Name: ${widget.person.name}',
-                        style: TextStyle(fontSize: 17),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'BirthDate: ${formatDate}',
-                        style: TextStyle(fontSize: 17),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'Address: ${widget.person.address}',
-                        style: TextStyle(fontSize: 17),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
+                        Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+                        Text(
+                          'Name: ${widget.person.name}',
+                          style: TextStyle(fontSize: 17),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'BirthDate: ${formatDate}',
+                          style: TextStyle(fontSize: 17),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Address: ${widget.person.address}',
+                          style: TextStyle(fontSize: 17),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Phone: ${widget.person.phone}',
+                          style: TextStyle(fontSize: 17),
+                        ),
+                      ],
+                    ),
                   ),
+                  // height: 455 ,
+                  width: MediaQuery.of(context).size.width,
+                  decoration:
+                      BoxDecoration(color: Color(0xffFFFFFF), boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(0, 2),
+                    ),
+                  ]),
                 ),
-                // height: 455 ,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(color: Color(0xffFFFFFF), boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(0, 1),
-                  ),
-                ]),
               ),
               Row(children: [
                 TextButton(

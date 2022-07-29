@@ -17,13 +17,14 @@ class ResponsitoryPerson {
     }
   }
 
-  Future createPerson(
-      String name, String avatar, String birthdate, String address) async {
+  Future createPerson(String name, String avatar, String birthdate,
+      String phone, String address) async {
     try {
       final response = await http.post(Uri.parse(uri), body: {
         'name': name,
         'avatar': avatar,
         'birthdate': birthdate,
+        'phone': phone,
         'address': address,
       });
       if (response.statusCode == 201) {
@@ -36,13 +37,14 @@ class ResponsitoryPerson {
     }
   }
 
-  Future updatePerson(
-      String id, String name, String birthdate, String address) async {
+  Future updatePerson(String id, String name, String birthdate, String address,
+      String phone) async {
     try {
       final response = await http.put(Uri.parse('$uri/$id'), body: {
         'name': name,
         'birthdate': birthdate,
         'address': address,
+        'phone': phone,
       });
       if (response.statusCode == 200) {
         return true;

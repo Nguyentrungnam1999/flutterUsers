@@ -19,8 +19,9 @@ class _EditPersonState extends State<EditPerson> {
   @override
   Widget build(BuildContext context) {
     TextEditingController nameController = TextEditingController();
-    TextEditingController birthdateController = TextEditingController();
     TextEditingController addressController = TextEditingController();
+    TextEditingController phoneController = TextEditingController();
+
     var formatDate = DateFormat('yyyy-MM-dd').format(date);
     return Scaffold(
       appBar: AppBar(
@@ -34,14 +35,18 @@ class _EditPersonState extends State<EditPerson> {
           child: Container(
             height: 550,
             width: 400,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color: Colors.indigo[500],
-            ),
+            // decoration: BoxDecoration(
+            //   borderRadius: BorderRadius.circular(4),
+            //   color: Colors.indigo[500],
+            // ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Center(
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    color: Colors.indigo[500],
+                  ),
                   child: Text(
                     '${widget.person.name}',
                     style: TextStyle(
@@ -52,6 +57,7 @@ class _EditPersonState extends State<EditPerson> {
                 ),
                 Container(
                     width: 300,
+                    margin: EdgeInsets.only(top: 50),
                     decoration: BoxDecoration(boxShadow: []),
                     child: TextField(
                       decoration: InputDecoration(hintText: 'Name'),
@@ -89,23 +95,34 @@ class _EditPersonState extends State<EditPerson> {
                       controller: addressController,
                       decoration: InputDecoration(hintText: 'Address'),
                     )),
+                Container(
+                    width: 300,
+                    decoration: BoxDecoration(boxShadow: []),
+                    child: TextField(
+                      controller: phoneController,
+                      decoration: InputDecoration(hintText: 'Phone'),
+                    )),
                 SizedBox(
                   width: 100,
                   child: TextButton(
-                      style:
-                          TextButton.styleFrom(backgroundColor: Colors.white),
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.indigo[500]),
                       onPressed: () async {
                         bool response = await responsitoryPerson.updatePerson(
                             widget.person.id,
                             nameController.text,
                             date.toString(),
-                            addressController.text);
+                            addressController.text,
+                            phoneController.text);
                         if (response) {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (_) => HomePage()));
                         }
                       },
-                      child: Text('Save')),
+                      child: Text(
+                        'Save',
+                        style: TextStyle(color: Colors.white),
+                      )),
                 )
               ],
             ),

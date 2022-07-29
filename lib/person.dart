@@ -4,6 +4,7 @@ class Person {
   final String? avatar;
   final String? birthdate;
   final String? address;
+  final String? phone;
 
   const Person({
     required this.id,
@@ -11,6 +12,7 @@ class Person {
     required this.avatar,
     required this.birthdate,
     required this.address,
+    required this.phone,
   });
 
   factory Person.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Person {
       avatar: json['avatar'],
       birthdate: json['birthdate'],
       address: json['address'],
+      phone: json['phone'],
     );
   }
 }
