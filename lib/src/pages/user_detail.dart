@@ -1,31 +1,29 @@
-import 'package:crudusers/edit_person.dart';
-import 'package:crudusers/main.dart';
-import 'package:crudusers/person.dart';
-import 'package:crudusers/respository/person_respository.dart';
+import 'package:crudusers/src/controllers/user_controller.dart';
+import 'package:crudusers/src/models/user.dart';
+import 'package:crudusers/src/pages/home_page.dart';
+import 'package:crudusers/src/pages/update_user.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class MyDetails extends StatefulWidget {
-  Person person;
-  MyDetails({required this.person});
+class UserDetail extends StatefulWidget {
+  User user;
+  UserDetail({required this.user});
+
   @override
-  _MyDetailsState createState() => _MyDetailsState();
+  State<UserDetail> createState() => _UserDetailState();
 }
 
-class _MyDetailsState extends State<MyDetails> {
-  ResponsitoryPerson responsitoryPerson = ResponsitoryPerson();
-
+class _UserDetailState extends State<UserDetail> {
+  final UserController userController = Get.put(UserController());
   @override
   Widget build(BuildContext context) {
-    DateTime dt = DateTime.parse(widget.person.birthdate ?? '');
+    DateTime dt = DateTime.parse(widget.user.birthdate ?? '');
     var formatDate = DateFormat('yyyy-MM-dd').format(dt);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('My Details'),
-        elevation: 0.0,
-        backgroundColor: Colors.indigo[700],
-      ),
+      appBar: AppBar(title: const Text('Detail User')),
       body: Center(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 18, vertical: 32),
@@ -61,15 +59,15 @@ class _MyDetailsState extends State<MyDetails> {
                             width: 90,
                             child: CircleAvatar(
                               radius: 30.0,
-                              backgroundImage:
-                                  NetworkImage('${widget.person.avatar}'),
+                              backgroundImage: NetworkImage(
+                                  '${widget.user.avatar != '' ? widget.user.avatar : 'https://picsum.photos/250?image=9'}'),
                               backgroundColor: Colors.transparent,
                             ),
                           ),
                         ),
                         Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                         Text(
-                          'Name: ${widget.person.name}',
+                          'Name: ${widget.user.name}',
                           style: TextStyle(fontSize: 17),
                         ),
                         SizedBox(
@@ -83,14 +81,14 @@ class _MyDetailsState extends State<MyDetails> {
                           height: 10,
                         ),
                         Text(
-                          'Address: ${widget.person.address}',
+                          'Address: ${widget.user.address}',
                           style: TextStyle(fontSize: 17),
                         ),
                         SizedBox(
                           height: 10,
                         ),
                         Text(
-                          'Phone: ${widget.person.phone}',
+                          'Phone: ${widget.user.phone}',
                           style: TextStyle(fontSize: 17),
                         ),
                       ],
@@ -110,12 +108,7 @@ class _MyDetailsState extends State<MyDetails> {
               Row(children: [
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => EditPerson(
-                                  person: widget.person,
-                                )));
+                    Get.to(UpdateUser(user: widget.user));
                   },
                   child: Text('Edit'),
                 ),
@@ -126,7 +119,7 @@ class _MyDetailsState extends State<MyDetails> {
                         builder: ((context) => AlertDialog(
                               title: const Text('Delete Person'),
                               content: Text(
-                                  'Are you sure delete - ${widget.person.name}'),
+                                  'Are you sure delete - ${widget.user.name}'),
                               actions: [
                                 TextButton(
                                   onPressed: () =>
@@ -135,13 +128,11 @@ class _MyDetailsState extends State<MyDetails> {
                                 ),
                                 TextButton(
                                   onPressed: () async {
-                                    bool response = await responsitoryPerson
-                                        .deletePerson(widget.person.id);
+                                    bool response = await userController
+                                        .deleteUser(widget.user.id);
                                     if (response) {
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (_) => HomePage()));
+                                      Navigator.pop(context, 'OK');
+                                      Get.to(HomePage());
                                     } else {
                                       Navigator.pop(context, 'OK');
                                     }

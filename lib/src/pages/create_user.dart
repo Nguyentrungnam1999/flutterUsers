@@ -1,20 +1,22 @@
 import 'dart:io';
-
 import 'package:crudusers/main.dart';
 import 'package:crudusers/respository/person_respository.dart';
+import 'package:crudusers/src/controllers/user_controller.dart';
+import 'package:crudusers/src/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 
-class CreatePage extends StatefulWidget {
-  const CreatePage({super.key});
+class CreateUser extends StatefulWidget {
+  const CreateUser({super.key});
 
   @override
-  State<CreatePage> createState() => _CreatePageState();
+  State<CreateUser> createState() => _CreateUserState();
 }
 
-class _CreatePageState extends State<CreatePage> {
-  ResponsitoryPerson responsesitory = ResponsitoryPerson();
+class _CreateUserState extends State<CreateUser> {
+  final UserController usersController = Get.put(UserController());
   final _nameController = TextEditingController();
   final _avatarController = TextEditingController();
   final _addressControler = TextEditingController();
@@ -116,19 +118,14 @@ class _CreatePageState extends State<CreatePage> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      bool response = await responsesitory.createPerson(
-                        _nameController.text,
-                        _avatarController.text,
-                        date.toString(),
-                        _phoneControler.text,
-                        _addressControler.text,
-                      );
-                      if (response) {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => const HomePage()),
-                        // );
+                      bool res = await usersController.addNewUser(
+                          _nameController.text,
+                          _avatarController.text,
+                          date.toString(),
+                          _phoneControler.text,
+                          _addressControler.text);
+                      if (res) {
+                        Get.to(const HomePage());
                       } else {
                         throw Exception('Faield to create data.');
                       }
