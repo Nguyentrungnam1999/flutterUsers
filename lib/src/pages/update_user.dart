@@ -1,10 +1,9 @@
 import 'package:crudusers/main.dart';
-import 'package:crudusers/person.dart';
-import 'package:crudusers/person_detail.dart';
-import 'package:crudusers/respository/person_respository.dart';
+import 'package:crudusers/connectHttp/person_detail.dart';
 import 'package:crudusers/src/controllers/user_controller.dart';
 import 'package:crudusers/src/models/user.dart';
 import 'package:crudusers/src/pages/home_page.dart';
+import 'package:crudusers/src/pages/loading_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -20,12 +19,11 @@ class UpdateUser extends StatefulWidget {
 class _UpdateUserState extends State<UpdateUser> {
   final UserController usersController = Get.put(UserController());
   DateTime date = DateTime.now();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    TextEditingController nameController = TextEditingController();
-    TextEditingController addressController = TextEditingController();
-    TextEditingController phoneController = TextEditingController();
-
     var formatDate = DateFormat('yyyy-MM-dd').format(date);
     return Scaffold(
       appBar: AppBar(
@@ -94,7 +92,6 @@ class _UpdateUserState extends State<UpdateUser> {
                 ),
                 Container(
                     width: 300,
-                    decoration: BoxDecoration(boxShadow: []),
                     child: TextField(
                       controller: addressController,
                       decoration: InputDecoration(hintText: 'Address'),
@@ -115,7 +112,9 @@ class _UpdateUserState extends State<UpdateUser> {
                         phoneController.text,
                         addressController.text);
                     if (res) {
-                      Get.to(const HomePage());
+                      usersController.isLoading == true
+                          ? LoadingPage()
+                          : Get.to(const HomePage());
                     } else {
                       throw Exception('Faield to create data.');
                     }

@@ -1,7 +1,7 @@
+import 'package:crudusers/connectHttp/person.dart';
+import 'package:crudusers/connectHttp/respository/person_respository.dart';
 import 'package:crudusers/main.dart';
-import 'package:crudusers/person.dart';
-import 'package:crudusers/person_detail.dart';
-import 'package:crudusers/respository/person_respository.dart';
+import 'package:crudusers/connectHttp/person_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';

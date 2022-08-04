@@ -1,7 +1,8 @@
 import 'dart:io';
 
+import 'package:crudusers/connectHttp/respository/person_respository.dart';
 import 'package:crudusers/main.dart';
-import 'package:crudusers/respository/person_respository.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';

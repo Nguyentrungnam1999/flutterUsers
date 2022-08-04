@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:crudusers/person.dart';
+import 'package:crudusers/connectHttp/person.dart';
 import 'package:http/http.dart' as http;
 
 class ResponsitoryPerson {

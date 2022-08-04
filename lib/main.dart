@@ -1,11 +1,5 @@
 import 'package:crudusers/app.dart';
-import 'package:crudusers/create_page.dart';
-import 'package:crudusers/loading_page.dart';
-import 'package:crudusers/person.dart';
-import 'package:crudusers/person_detail.dart';
-import 'package:crudusers/respository/person_respository.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MaterialApp(

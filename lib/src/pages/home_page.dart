@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:crudusers/src/configs/appConfig.dart';
 import 'package:crudusers/src/controllers/user_controller.dart';
 import 'package:crudusers/src/models/user.dart';
 import 'package:crudusers/src/pages/create_user.dart';
+import 'package:crudusers/src/pages/loading_page.dart';
 import 'package:crudusers/src/pages/user_detail.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -18,60 +21,68 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<User> users = [];
   final UserController usersController = Get.put(UserController());
 
-  getData() async {
-    usersController.getListUserData();
+  Future getData() async {
+    await usersController.getListUserData();
     setState(() {});
   }
 
   @override
   void initState() {
-    setState(() {
-      getData();
-    });
+    getData();
     super.initState();
+  }
+
+  Future refresh() async {
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('User List')),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: usersController.users.length,
-              itemBuilder: ((context, index) {
-                DateTime dt = DateTime.parse(
-                    usersController.users[index].birthdate ?? '');
-                var formatDate = DateFormat('yyyy-MM-dd').format(dt);
+      body: usersController.isLoading == true
+          ? LoadingPage()
+          : RefreshIndicator(
+              onRefresh: refresh,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: usersController.users.length,
+                      itemBuilder: ((context, index) {
+                        final user = usersController.users[index];
+                        DateTime dt = DateTime.parse(user.birthdate ?? '');
+                        var formatDate = DateFormat('yyyy-MM-dd').format(dt);
 
-                return Card(
-                  margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  color: Color.fromARGB(255, 247, 243, 243),
-                  child: InkWell(
-                    onTap: (() {
-                      Get.to(UserDetail(user: usersController.users[index]));
-                    }),
-                    child: ListTile(
-                      leading: Container(
-                          child: CircleAvatar(
-                        radius: 30.0,
-                        backgroundImage: NetworkImage(
-                            '${usersController.users[index].avatar == '' ? 'https://picsum.photos/250?image=9' : usersController.users[index].avatar}'),
-                        backgroundColor: Colors.transparent,
-                      )),
-                      title: new Text('${usersController.users[index].name}'),
-                      subtitle: Text('${formatDate.toString()}'),
+                        return Card(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 5),
+                          color: const Color.fromARGB(255, 247, 243, 243),
+                          child: InkWell(
+                            onTap: (() {
+                              Get.to(UserDetail(user: user));
+                            }),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                radius: 30.0,
+                                backgroundImage: NetworkImage(
+                                    '${user.avatar == '' ? 'https://picsum.photos/250?image=9' : user.avatar}'),
+                                backgroundColor: Colors.transparent,
+                              ),
+                              title: Text('${user.name}'),
+                              subtitle: Text('${formatDate.toString()}'),
+                            ),
+                          ),
+                        );
+                      }),
                     ),
                   ),
-                );
-              }),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.to(CreateUser());
